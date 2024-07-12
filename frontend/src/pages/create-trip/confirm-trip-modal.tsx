@@ -1,5 +1,7 @@
 import { AtSign, User, X } from "lucide-react";
 import { FormEvent } from "react";
+import { Button } from "../../components/button";
+import { Modal } from "../../components/modal";
 
 interface ConfirmTripModalProps {
   closeConfirmTripModal: () => void;
@@ -11,7 +13,7 @@ export function ConfirmTripModal({
   createTrip,
 }: ConfirmTripModalProps) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60">
+    <Modal>
       <div className="w-[648px] space-y-5 rounded-lg bg-zinc-900 px-6 py-5 shadow-shape">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -41,6 +43,7 @@ export function ConfirmTripModal({
         <form onSubmit={createTrip} className="space-y-3">
           <div className="flex h-14 flex-1 items-center gap-2 rounded-lg border-zinc-800 bg-zinc-950 px-4">
             <User className="size-5 text-zinc-400" />
+
             <input
               className="w-40 flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
               type="text"
@@ -59,14 +62,11 @@ export function ConfirmTripModal({
             />
           </div>
 
-          <button
-            type="submit"
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-lime-300 px-5 font-medium text-lime-950 hover:bg-lime-400"
-          >
+          <Button type="submit" variant="primary" size="full">
             Confirmar criação da viagem
-          </button>
+          </Button>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
