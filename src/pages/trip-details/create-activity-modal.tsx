@@ -2,6 +2,9 @@ import { Calendar, Tag, X } from "lucide-react";
 import { Button } from "../../components/button";
 import { Modal } from "../../components/modal";
 import { Input } from "../../components/input";
+import { FormEvent } from "react";
+import { api } from "../../lib/axios";
+import { useParams } from "react-router-dom";
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void;
@@ -10,6 +13,23 @@ interface CreateActivityModalProps {
 export function CreateActivityModal({
   closeCreateActivityModal,
 }: CreateActivityModalProps) {
+  const { tripId } = useParams();
+
+  async function createActivity(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    const title = data.get("title")?.toString();
+    const occursAt = data.get("occurs_at")?.toString();
+
+    await api.post(`/trips/${tripId}/activities`, {
+      title,
+      occurs_at: occursAt,
+    });
+
+    window.document.location.reload();
+  }
   return (
     <Modal>
       <div className="w-[648px] space-y-5 rounded-lg bg-zinc-900 px-6 py-5 shadow-shape">
@@ -28,7 +48,7 @@ export function CreateActivityModal({
           </p>
         </div>
 
-        <form className="space-y-3">
+        <form onSubmit={createActivity} className="space-y-3">
           <div className="flex h-14 flex-1 items-center gap-2 rounded-lg border-zinc-800 bg-zinc-950 px-4">
             <Tag className="size-5 text-zinc-400" />
 
@@ -38,11 +58,8 @@ export function CreateActivityModal({
           <div className="flex items-center gap-2">
             <div className="flex h-14 flex-1 items-center gap-2 rounded-lg border-zinc-800 bg-zinc-950 px-4">
               <Calendar className="size-5 text-zinc-400" />
-              <input
-                className="w-40 flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
-                type="datetime-local"
-                name="occurs_at"
-              />
+
+              <Input type="datetime-local" name="occurs_at" />
             </div>
           </div>
 
